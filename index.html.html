@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BotrixEdu — Robotics & AI Learning Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0A1628;--blue:#1560E8;--electric:#3B82F6;--glow:#60A5FA;
+  --white:#FFFFFF;--offwhite:#F4F8FF;--soft:#E8F0FE;
+  --mid:#3B5080;--light:#7A94BC;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--navy);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;background:rgba(255,255,255,0.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(21,96,232,0.08)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-icon{width:40px;height:40px;border-radius:10px;background:#fff;border:1.5px solid rgba(21,96,232,0.15);display:flex;align-items:center;justify-content:center;overflow:hidden;padding:4px;box-shadow:0 2px 12px rgba(21,96,232,0.12)}
+.logo-icon img{width:100%;height:100%;object-fit:contain}
+.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--navy);letter-spacing:-0.02em}
+.logo-text span{color:var(--blue)}
+nav ul{display:flex;list-style:none;gap:2rem;align-items:center}
+nav ul a{font-size:0.875rem;font-weight:500;color:var(--mid);text-decoration:none;transition:color 0.2s}
+nav ul a:hover{color:var(--blue)}
+.nav-cta{background:var(--blue)!important;color:#fff!important;padding:9px 20px;border-radius:8px;font-weight:500!important;box-shadow:0 2px 12px rgba(21,96,232,0.3);transition:all 0.2s!important}
+.nav-cta:hover{background:#0D3B8E!important;transform:translateY(-1px)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:100px 5vw 60px;position:relative;overflow:hidden;background:var(--white)}
+.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(21,96,232,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(21,96,232,0.04) 1px,transparent 1px);background-size:55px 55px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 40%,transparent 100%)}
+.orb{position:absolute;border-radius:50%;pointer-events:none}
+.orb-1{top:-10%;right:-5%;width:650px;height:650px;background:radial-gradient(circle,rgba(21,96,232,0.1) 0%,transparent 70%);animation:float 8s ease-in-out infinite}
+.orb-2{bottom:-20%;left:-10%;width:450px;height:450px;background:radial-gradient(circle,rgba(59,130,246,0.07) 0%,transparent 70%);animation:float 11s ease-in-out infinite reverse}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-25px)}}
+.hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;position:relative;z-index:2;width:100%;max-width:1200px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(21,96,232,0.07);border:1px solid rgba(21,96,232,0.15);border-radius:100px;padding:6px 14px 6px 8px;font-size:0.78rem;font-weight:600;color:var(--blue);margin-bottom:1.5rem;letter-spacing:0.03em;text-transform:uppercase}
+.badge-dot{width:6px;height:6px;background:var(--blue);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.5)}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.4rem,4.5vw,4rem);font-weight:800;line-height:1.06;letter-spacing:-0.035em;color:var(--navy);margin-bottom:1.2rem}
+.grad{background:linear-gradient(135deg,var(--blue),var(--electric));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.05rem;line-height:1.75;color:var(--mid);font-weight:300;max-width:480px;margin-bottom:2rem}
+.hero-meta{display:flex;gap:2rem;margin-bottom:2rem;flex-wrap:wrap}
+.meta-item{display:flex;align-items:center;gap:6px;font-size:0.82rem;color:var(--mid)}
+.meta-icon{width:28px;height:28px;background:rgba(21,96,232,0.07);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.9rem}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-p{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--blue),var(--electric));color:#fff;padding:13px 28px;border-radius:10px;font-weight:500;font-size:0.95rem;text-decoration:none;box-shadow:0 4px 24px rgba(21,96,232,0.38);transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1);border:none;cursor:pointer}
+.btn-p:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 8px 32px rgba(21,96,232,0.5)}
+.btn-s{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--blue);padding:13px 22px;border-radius:10px;font-weight:500;font-size:0.95rem;text-decoration:none;border:1.5px solid rgba(21,96,232,0.25);transition:all 0.2s;cursor:pointer}
+.btn-s:hover{background:rgba(21,96,232,0.05);border-color:var(--blue);transform:translateY(-2px)}
+
+/* Hero visual */
+.hero-visual{position:relative}
+.hero-img-wrap{border-radius:20px;overflow:hidden;position:relative;box-shadow:0 30px 80px rgba(21,96,232,0.15),0 4px 16px rgba(0,0,0,0.06);border:1.5px solid rgba(21,96,232,0.1)}
+.hero-img-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--glow),var(--blue));z-index:2}
+.hero-img-wrap img{width:100%;height:360px;object-fit:cover;display:block}
+.hero-floaters{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem}
+.floater{background:var(--white);border:1px solid rgba(21,96,232,0.1);border-radius:12px;padding:12px 14px;box-shadow:0 4px 16px rgba(21,96,232,0.07);display:flex;align-items:center;gap:10px}
+.floater-icon{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,rgba(21,96,232,0.1),rgba(59,130,246,0.1));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.floater-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.78rem;color:var(--navy)}
+.floater-sub{font-size:0.7rem;color:var(--light)}
+
+/* STATS */
+.stats{background:var(--navy);padding:3.5rem 5vw;display:grid;grid-template-columns:repeat(5,1fr);position:relative;overflow:hidden}
+.stats::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 20% 50%,rgba(21,96,232,0.3) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 80% 50%,rgba(59,130,246,0.2) 0%,transparent 60%)}
+.stat-item{text-align:center;border-right:1px solid rgba(255,255,255,0.07);padding:0 1.5rem;position:relative}
+.stat-item:last-child{border:none}
+.stat-n{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:800;color:#fff;letter-spacing:-0.04em}
+.stat-n span{background:linear-gradient(135deg,var(--glow),var(--electric));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-d{font-size:0.78rem;color:rgba(255,255,255,0.4);margin-top:0.3rem}
+
+/* SECTION BASE */
+section{padding:7rem 5vw;position:relative}
+.sec-label{font-size:0.72rem;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--blue);margin-bottom:0.8rem;display:flex;align-items:center;gap:8px}
+.sec-label::before{content:'';width:22px;height:2px;background:var(--blue);border-radius:2px}
+.sec-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;color:var(--navy);letter-spacing:-0.03em;line-height:1.1;margin-bottom:1rem}
+.sec-sub{font-size:1rem;color:var(--mid);line-height:1.7;font-weight:300;max-width:520px;margin-bottom:3rem}
+.reveal{opacity:0;transform:translateY(28px);transition:all 0.7s cubic-bezier(0.16,1,0.3,1)}
+.reveal.visible{opacity:1;transform:none}
+.rd1{transition-delay:0.1s}.rd2{transition-delay:0.2s}.rd3{transition-delay:0.3s}.rd4{transition-delay:0.4s}
+
+/* ABOUT */
+.about{background:var(--offwhite)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.about-img{border-radius:18px;overflow:hidden;position:relative;box-shadow:0 20px 60px rgba(21,96,232,0.1)}
+.about-img img{width:100%;height:400px;object-fit:cover;display:block}
+.about-img-badge{position:absolute;bottom:20px;left:20px;background:rgba(255,255,255,0.95);border-radius:12px;padding:12px 16px;backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(21,96,232,0.15);display:flex;align-items:center;gap:10px}
+.about-img-badge .num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;color:var(--blue)}
+.about-img-badge .lbl{font-size:0.75rem;color:var(--mid)}
+.highlight-box{background:rgba(21,96,232,0.05);border:1px solid rgba(21,96,232,0.12);border-radius:12px;padding:1.2rem 1.5rem;margin-bottom:1rem}
+.highlight-box p{font-size:0.9rem;color:var(--mid);line-height:1.65}
+.highlight-box strong{color:var(--blue)}
+.contact-strip{display:flex;gap:1.5rem;margin-top:1.5rem;flex-wrap:wrap}
+.contact-pill{display:flex;align-items:center;gap:8px;background:var(--white);border:1px solid rgba(21,96,232,0.1);border-radius:8px;padding:8px 14px;font-size:0.82rem;color:var(--mid);box-shadow:0 2px 8px rgba(21,96,232,0.06)}
+.contact-pill strong{color:var(--navy)}
+
+/* PROGRAMS */
+.programs{background:var(--white)}
+.programs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+.prog-card{background:var(--white);border:1.5px solid rgba(21,96,232,0.1);border-radius:18px;overflow:hidden;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 2px 12px rgba(21,96,232,0.05)}
+.prog-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(21,96,232,0.13);border-color:rgba(21,96,232,0.25)}
+.prog-img{width:100%;height:200px;object-fit:cover;display:block}
+.prog-body{padding:1.5rem}
+.prog-tag{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);background:rgba(21,96,232,0.07);padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:0.75rem}
+.prog-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:var(--navy);margin-bottom:0.4rem;letter-spacing:-0.01em}
+.prog-desc{font-size:0.845rem;color:var(--mid);line-height:1.65;font-weight:300;margin-bottom:1rem}
+.prog-pills{display:flex;flex-wrap:wrap;gap:0.5rem}
+.pill{font-size:0.72rem;background:var(--soft);color:var(--mid);padding:3px 10px;border-radius:100px}
+
+/* CURRICULUM */
+.curriculum{background:var(--offwhite)}
+.months-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:2rem}
+.month-card{background:var(--white);border:1px solid rgba(21,96,232,0.08);border-radius:14px;padding:1.5rem;position:relative;overflow:hidden;transition:all 0.25s}
+.month-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--blue),var(--glow));border-radius:0 3px 3px 0;opacity:0;transition:opacity 0.25s}
+.month-card:hover{box-shadow:0 8px 30px rgba(21,96,232,0.1);border-color:rgba(21,96,232,0.18)}
+.month-card:hover::after{opacity:1}
+.month-num{font-family:'Syne',sans-serif;font-weight:800;font-size:0.7rem;color:var(--blue);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem}
+.month-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;color:var(--navy);margin-bottom:0.75rem}
+.month-list{list-style:none;display:flex;flex-direction:column;gap:4px}
+.month-list li{font-size:0.8rem;color:var(--mid);padding-left:14px;position:relative;line-height:1.5}
+.month-list li::before{content:'▸';position:absolute;left:0;color:var(--blue);font-size:0.65rem;top:2px}
+.month-outcome{margin-top:1rem;padding-top:0.75rem;border-top:1px solid rgba(21,96,232,0.07);font-size:0.75rem;color:var(--blue);font-weight:500}
+
+/* AI DIPLOMA MODULES */
+.diploma{background:var(--navy);position:relative;overflow:hidden}
+.diploma::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 10% 40%,rgba(21,96,232,0.35) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 90% 70%,rgba(59,130,246,0.2) 0%,transparent 60%)}
+.diploma .sec-label{color:var(--glow)}
+.diploma .sec-label::before{background:var(--glow)}
+.diploma .sec-title{color:#fff}
+.diploma .sec-sub{color:rgba(255,255,255,0.55)}
+.modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;position:relative}
+.mod-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.5rem;transition:all 0.3s}
+.mod-card:hover{background:rgba(255,255,255,0.09);border-color:rgba(96,165,250,0.3);transform:translateY(-4px)}
+.mod-num{font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;color:rgba(96,165,250,0.2);margin-bottom:0.3rem;letter-spacing:-0.05em}
+.mod-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;color:#fff;margin-bottom:0.4rem}
+.mod-weeks{font-size:0.72rem;color:rgba(255,255,255,0.35);margin-bottom:0.75rem}
+.mod-list{list-style:none;display:flex;flex-direction:column;gap:3px}
+.mod-list li{font-size:0.78rem;color:rgba(255,255,255,0.6);padding-left:14px;position:relative;line-height:1.5}
+.mod-list li::before{content:'▸';position:absolute;left:0;color:var(--glow);font-size:0.65rem;top:2px}
+.projects-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-top:2rem;position:relative}
+.proj-item{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.2rem;text-align:center;transition:all 0.2s}
+.proj-item:hover{background:rgba(255,255,255,0.1);transform:translateY(-3px)}
+.proj-emoji{font-size:1.8rem;margin-bottom:0.5rem}
+.proj-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.78rem;color:#fff;margin-bottom:0.2rem}
+.proj-type{font-size:0.68rem;color:rgba(255,255,255,0.35)}
+.cert-box{margin-top:2.5rem;background:linear-gradient(135deg,rgba(21,96,232,0.2),rgba(59,130,246,0.1));border:1px solid rgba(96,165,250,0.25);border-radius:14px;padding:1.5rem 2rem;display:flex;align-items:center;gap:1rem;position:relative}
+.cert-icon{font-size:2.5rem;flex-shrink:0}
+.cert-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff}
+.cert-sub{font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:3px}
+
+/* SHOP */
+.shop{background:var(--white)}
+.shop-tabs{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:2.5rem}
+.shop-tab{padding:8px 18px;border-radius:100px;font-size:0.82rem;font-weight:500;cursor:pointer;border:1.5px solid rgba(21,96,232,0.15);color:var(--mid);background:transparent;transition:all 0.2s}
+.shop-tab.active,.shop-tab:hover{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 4px 16px rgba(21,96,232,0.3)}
+.shop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.3rem}
+.shop-card{background:var(--white);border:1.5px solid rgba(21,96,232,0.08);border-radius:16px;overflow:hidden;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);position:relative}
+.shop-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(21,96,232,0.12);border-color:rgba(21,96,232,0.2)}
+.shop-card-img{width:100%;height:160px;object-fit:cover;display:block;background:var(--soft)}
+.shop-card-body{padding:1rem}
+.shop-badge{font-size:0.66rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);background:rgba(21,96,232,0.07);padding:2px 8px;border-radius:100px;display:inline-block;margin-bottom:0.5rem}
+.shop-name{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;color:var(--navy);margin-bottom:0.3rem;line-height:1.3}
+.shop-desc{font-size:0.76rem;color:var(--mid);line-height:1.55;font-weight:300;margin-bottom:0.75rem}
+.shop-footer{display:flex;align-items:center;justify-content:space-between}
+.shop-price{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--navy)}
+.shop-price span{font-size:0.7rem;font-weight:400;color:var(--light)}
+.add-btn{background:var(--blue);color:#fff;border:none;padding:7px 14px;border-radius:7px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:5px}
+.add-btn:hover{background:#0D3B8E;transform:scale(1.05)}
+.cart-count{position:fixed;bottom:2rem;right:2rem;background:var(--blue);color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.85rem;box-shadow:0 4px 20px rgba(21,96,232,0.4);cursor:pointer;z-index:150;transition:all 0.3s;flex-direction:column;gap:1px}
+.cart-count:hover{transform:scale(1.1)}
+.cart-label{font-size:0.55rem;font-weight:400;opacity:0.8}
+
+/* MENTORS */
+.mentors{background:var(--offwhite)}
+.mentors-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+.mentor-card{background:var(--white);border:1px solid rgba(21,96,232,0.08);border-radius:16px;padding:2rem;display:flex;gap:1.5rem;align-items:flex-start;transition:all 0.3s}
+.mentor-card:hover{box-shadow:0 12px 40px rgba(21,96,232,0.1);transform:translateY(-4px)}
+.mentor-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--electric));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:#fff;flex-shrink:0;box-shadow:0 4px 16px rgba(21,96,232,0.3)}
+.mentor-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:var(--navy);margin-bottom:0.25rem}
+.mentor-role{font-size:0.8rem;color:var(--blue);font-weight:500;margin-bottom:0.5rem}
+.mentor-org{font-size:0.78rem;color:var(--light);margin-bottom:0.6rem}
+.mentor-tags{display:flex;flex-wrap:wrap;gap:0.4rem}
+.mentor-tag{font-size:0.68rem;background:rgba(21,96,232,0.07);color:var(--mid);padding:2px 8px;border-radius:100px}
+
+/* FEES */
+.fees{background:var(--white)}
+.fee-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+.fee-card{background:var(--offwhite);border:1.5px solid rgba(21,96,232,0.1);border-radius:18px;padding:2rem;position:relative;overflow:hidden;transition:all 0.3s}
+.fee-card.featured{background:var(--navy);border-color:transparent}
+.fee-card.featured::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 30%,rgba(21,96,232,0.4) 0%,transparent 60%)}
+.fee-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(21,96,232,0.12)}
+.fee-tag{font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue);background:rgba(21,96,232,0.07);padding:3px 10px;border-radius:100px;display:inline-block;margin-bottom:1rem}
+.fee-card.featured .fee-tag{background:rgba(96,165,250,0.2);color:var(--glow)}
+.fee-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:var(--navy);margin-bottom:0.4rem}
+.fee-card.featured .fee-name{color:#fff}
+.fee-price{font-family:'Syne',sans-serif;font-weight:800;font-size:2.4rem;color:var(--blue);letter-spacing:-0.04em;margin-bottom:0.3rem}
+.fee-card.featured .fee-price{color:var(--glow)}
+.fee-note{font-size:0.8rem;color:var(--mid);margin-bottom:1.5rem}
+.fee-card.featured .fee-note{color:rgba(255,255,255,0.4)}
+.fee-list{list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.5rem}
+.fee-list li{font-size:0.85rem;color:var(--mid);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.fee-card.featured .fee-list li{color:rgba(255,255,255,0.65)}
+.fee-list li::before{content:'✓';color:var(--blue);font-weight:700;flex-shrink:0}
+.fee-card.featured .fee-list li::before{color:var(--glow)}
+.fee-details{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1.5rem}
+.fee-detail{background:rgba(21,96,232,0.05);border-radius:8px;padding:10px 12px}
+.fee-card.featured .fee-detail{background:rgba(255,255,255,0.07)}
+.fee-detail-label{font-size:0.68rem;color:var(--light);margin-bottom:2px;text-transform:uppercase;letter-spacing:0.06em}
+.fee-card.featured .fee-detail-label{color:rgba(255,255,255,0.35)}
+.fee-detail-val{font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;color:var(--navy)}
+.fee-card.featured .fee-detail-val{color:#fff}
+
+/* VISION */
+.vision{background:var(--navy);text-align:center;overflow:hidden}
+.vision::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 50% 50%,rgba(21,96,232,0.3) 0%,transparent 70%)}
+.vision .sec-label{justify-content:center;color:var(--glow)}
+.vision .sec-label::before{display:none}
+.vision .sec-title{color:#fff;max-width:700px;margin:0 auto 1rem}
+.vision-quote{font-size:1.1rem;color:rgba(255,255,255,0.5);line-height:1.75;max-width:600px;margin:0 auto 3rem;font-weight:300;font-style:italic;position:relative}
+.plan-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;position:relative}
+.plan-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:1.2rem;text-align:center;transition:all 0.25s}
+.plan-card:hover{background:rgba(255,255,255,0.08);border-color:rgba(96,165,250,0.25);transform:translateY(-3px)}
+.plan-yr{font-family:'Syne',sans-serif;font-weight:800;font-size:0.7rem;letter-spacing:0.12em;color:var(--glow);text-transform:uppercase;margin-bottom:0.4rem}
+.plan-title{font-family:'Syne',sans-serif;font-weight:700;font-size:0.82rem;color:#fff;margin-bottom:0.4rem;line-height:1.3}
+.plan-sub{font-size:0.7rem;color:rgba(255,255,255,0.4);line-height:1.5}
+
+/* CTA */
+.cta-section{background:var(--offwhite);text-align:center}
+.cta-card{background:var(--navy);border-radius:24px;padding:4rem;position:relative;overflow:hidden;max-width:800px;margin:0 auto}
+.cta-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(21,96,232,0.4) 0%,transparent 70%)}
+.cta-card .sec-title{color:#fff;position:relative;max-width:600px;margin:0.5rem auto 1rem}
+.cta-card .sec-label{justify-content:center;color:var(--glow)}
+.cta-card .sec-label::before{display:none}
+.cta-sub{font-size:0.95rem;color:rgba(255,255,255,0.5);max-width:440px;margin:0 auto 2rem;font-weight:300;line-height:1.7;position:relative}
+.cta-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;position:relative}
+.cta-contact{display:flex;gap:1.5rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap;position:relative}
+.cta-c{display:flex;align-items:center;gap:6px;font-size:0.82rem;color:rgba(255,255,255,0.45)}
+.cta-c a{color:rgba(255,255,255,0.7);text-decoration:none}
+.cta-c a:hover{color:#fff}
+
+/* FOOTER */
+footer{background:var(--navy);padding:4rem 5vw 2rem;border-top:1px solid rgba(21,96,232,0.15)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-tagline{font-size:0.82rem;color:rgba(255,255,255,0.35);line-height:1.7;max-width:240px;margin-top:0.75rem}
+.footer-col h4{font-family:'Syne',sans-serif;font-weight:700;font-size:0.75rem;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:1rem}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:0.5rem}
+.footer-col ul li a{font-size:0.82rem;color:rgba(255,255,255,0.35);text-decoration:none;transition:color 0.2s}
+.footer-col ul li a:hover{color:var(--glow)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.05)}
+.footer-copy{font-size:0.75rem;color:rgba(255,255,255,0.2)}
+.footer-social{display:flex;gap:0.6rem}
+.soc{width:32px;height:32px;border-radius:7px;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);font-size:0.75rem;text-decoration:none;transition:all 0.2s}
+.soc:hover{background:var(--blue);border-color:var(--blue);color:#fff;transform:translateY(-2px)}
+
+/* CART NOTIFICATION */
+.cart-notif{position:fixed;top:90px;right:2rem;background:var(--navy);color:#fff;border-radius:12px;padding:12px 18px;font-size:0.82rem;font-weight:500;box-shadow:0 8px 30px rgba(21,96,232,0.3);z-index:300;transform:translateX(200%);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);border:1px solid rgba(21,96,232,0.3)}
+.cart-notif.show{transform:translateX(0)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .hero-inner{grid-template-columns:1fr}.hero-visual{display:none}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .stat-item:nth-child(3){border-right:none}
+  .about-grid{grid-template-columns:1fr}
+  .programs-grid{grid-template-columns:1fr}
+  .months-grid{grid-template-columns:repeat(2,1fr)}
+  .modules-grid{grid-template-columns:repeat(2,1fr)}
+  .projects-strip{grid-template-columns:repeat(3,1fr)}
+  .shop-grid{grid-template-columns:repeat(2,1fr)}
+  .plan-grid{grid-template-columns:repeat(3,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  nav ul{display:none}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat-item{border-right:none!important;border-bottom:1px solid rgba(255,255,255,0.07);padding:1rem 0}
+  .months-grid{grid-template-columns:1fr}
+  .modules-grid{grid-template-columns:1fr}
+  .shop-grid{grid-template-columns:1fr}
+  .fee-grid{grid-template-columns:1fr}
+  .plan-grid{grid-template-columns:repeat(2,1fr)}
+  .projects-strip{grid-template-columns:repeat(2,1fr)}
+  .mentors-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- CART NOTIFICATION -->
+<div class="cart-notif" id="cartNotif">✓ Added to cart!</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon"><img src="data:image/jpeg;base64,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dE9wdGlvbnMAAAASAAAAAENwdG5ib29sAAAAAABDbGJyYm9vbAAAAAAAUmdzTWJvb2wAAAAAAENybkNib29sAAAAAABDbnRDYm9vbAAAAAAATGJsc2Jvb2wAAAAAAE5ndHZib29sAAAAAABFbWxEYm9vbAAAAAAASW50cmJvb2wAAAAAAEJja2dPYmpjAAAAAQAAAAAAAFJHQkMAAAADAAAAAFJkICBkb3ViQG/gAAAAAAAAAAAAR3JuIGRvdWJAb+AAAAAAAAAAAABCbCAgZG91YkBv4AAAAAAAAAAAAEJyZFRVbnRGI1JsdAAAAAAAAAAAAAAAAEJsZCBVbnRGI1JsdAAAAAAAAAAAAAAAAFJzbHRVbnRGI1B4bEBYAAAAAAAAAAAACnZlY3RvckRhdGFib29sAQAAAABQZ1BzZW51bQAAAABQZ1BzAAAAAFBnUEMAAAAATGVmdFVudEYjUmx0AAAAAAAAAAAAAAAAVG9wIFVudEYjUmx0AAAAAAAAAAAAAAAAU2NsIFVudEYjUHJjQFkAAAAAAAA4QklNA+0AAAAAABAAYAAAAAEAAgBgAAAAAQACOEJJTQQmAAAAAAAOAAAAAAAAAAAAAD+AAAA4QklNBA0AAAAAAAQAAAAeOEJJTQQZAAAAAAAEAAAAHjhCSU0D8wAAAAAACQAAAAAAAAAAAQA4QklNJxAAAAAAAAoAAQAAAAAAAAACOEJJTQP1AAAAAABIAC9mZgABAGxmZgAGAAAAAAABAC9mZgABAKGZmgAGAAAAAAABADIAAAABAFoAAAAGAAAAAAABADUAAAABAC0AAAAGAAAAAAABOEJJTQP4AAAAAABwAAD/////////////////////////////A+gAAAAA/////////////////////////////wPoAAAAAP////////////////////////////8D6AAAAAD/////////////////////////////A+gAADhCSU0ECAAAAAAAEAAAAAEAAAJAAAACQAAAAAA4QklNBB4AAAAAAAQAAAAAOEJJTQQaAAAAAAN7AAAABgAAAAAAAAAAAAAAbwAAAKsAAAAjADEANwAyADUANAAxADcAMQA2ADUAXwBsAG8AZwBvAGsAdQBjAG8AbQBfAGwAZQB0AHQAZQByAC0AYgAtAHIAbwBiAG8AdAAA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Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgY3JzOkFscmVhZHlBcHBsaWVkPSJUcnVlIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyNS0wNC0xM1QyMDowMjoxOCswNTozMCIgeG1wOk1vZGlmeURhdGU9IjIwMjUtMDgtMTVUMDc6MjI6MzUrMDU6MzAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjUtMDgtMTVUMDc6MjI6MzUrMDU6MzAiIGRjOmZvcm1hdD0iaW1hZ2UvanBlZyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo2OUEyRTc5QTc0NzlGMDExODJERThGQkJBNjBCNkMzOSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo2OUEyRTc5QTc0NzlGMDExODJERThGQkJBNjBCNkMzOSIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOjY5QTJFNzlBNzQ3OUYwMTE4MkRFOEZCQkE2MEI2QzM5Ij4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6NjlBMkU3OUE3NDc5RjAxMTgyREU4RkJCQTYwQjZDMzkiIHN0RXZ0OndoZW49IjIwMjUtMDgtMTVUMDc6MjI6MzUrMDU6MzAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCBDUzUgV2luZG93cyIgc3RFdnQ6Y2hhbmdlZD0iLyIvPiA8L3JkZjpTZXE+IDwveG1wTU06SGlzdG9yeT4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg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" alt="BotrixEdu"/></div>
+    <span class="logo-text">Botrix<span>Edu</span></span>
+  </a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#programs">Programs</a></li>
+    <li><a href="#diploma">AI Diploma</a></li>
+    <li><a href="#shop">Shop</a></li>
+    <li><a href="#fees">Fees</a></li>
+    <li><a href="#cta" class="nav-cta">Enroll Now</a></li>
+  </ul>
+</nav>
+
+<!-- CART BUBBLE -->
+<div class="cart-count" id="cartBubble" onclick="openCart()">
+  <span id="cartNum">0</span>
+  <span class="cart-label">🛒 Cart</span>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge"><span class="badge-dot"></span>Kerala's Premier Robotics & AI Academy</div>
+      <h1>Learn AI.<br><span class="grad">Build Robots.</span><br>Lead Tomorrow.</h1>
+      <p>BOTRIX EDU empowers students from Class 5–10 with hands-on Robotics, AI and Coding skills — turning screen consumers into technology creators.</p>
+      <div class="hero-meta">
+        <div class="meta-item"><div class="meta-icon">⏱</div> 6-Month Program</div>
+        <div class="meta-item"><div class="meta-icon">🤖</div> Robotics + AI + Coding</div>
+        <div class="meta-item"><div class="meta-icon">🎓</div> Certified Diploma</div>
+        <div class="meta-item"><div class="meta-icon">📍</div> Malappuram, Kerala</div>
+      </div>
+      <div class="hero-actions">
+        <a href="#cta" class="btn-p">Enroll Today <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="#programs" class="btn-s">Explore Programs</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img-wrap">
+        <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600&q=80" alt="Robotics Learning" loading="lazy"/>
+      </div>
+      <div class="hero-floaters">
+        <div class="floater"><div class="floater-icon">🔌</div><div><div class="floater-title">Electronics</div><div class="floater-sub">Circuits & Sensors</div></div></div>
+        <div class="floater"><div class="floater-icon">🧠</div><div><div class="floater-title">AI & ML</div><div class="floater-sub">Object Detection</div></div></div>
+        <div class="floater"><div class="floater-icon">💻</div><div><div class="floater-title">Python & C++</div><div class="floater-sub">Real Programming</div></div></div>
+        <div class="floater"><div class="floater-icon">🏆</div><div><div class="floater-title">Certification</div><div class="floater-sub">Recognised Diploma</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat-item reveal">
+    <div class="stat-n"><span class="count-up" data-t="50">0</span>K+</div>
+    <div class="stat-d">Students Reached</div>
+  </div>
+  <div class="stat-item reveal rd1">
+    <div class="stat-n"><span class="count-up" data-t="6">0</span></div>
+    <div class="stat-d">Module Curriculum</div>
+  </div>
+  <div class="stat-item reveal rd2">
+    <div class="stat-n"><span class="count-up" data-t="80">0</span>%</div>
+    <div class="stat-d">Practical Learning</div>
+  </div>
+  <div class="stat-item reveal rd3">
+    <div class="stat-n">₹<span class="count-up" data-t="12">0</span>K</div>
+    <div class="stat-d">Course Fee (6 months)</div>
+  </div>
+  <div class="stat-item reveal rd4">
+    <div class="stat-n"><span class="count-up" data-t="48">0</span></div>
+    <div class="stat-d">Total Classes</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-img reveal">
+      <img src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=600&q=80" alt="AI Education"/>
+      <div class="about-img-badge">
+        <div class="num">5–10</div>
+        <div class="lbl">Target Grade Range</div>
+      </div>
+    </div>
+    <div class="reveal rd1">
+      <div class="sec-label">Who We Are</div>
+      <h2 class="sec-title">Building Kerala's Next Generation of Tech Creators</h2>
+      <div class="highlight-box">
+        <p>In this era of technology, children should not just <strong>consume</strong> technology — they should become its <strong>creators</strong>. BOTRIX EDU provides a comprehensive platform that teaches children how to apply the things they learn in textbooks practically through Robotics projects and AI applications.</p>
+      </div>
+      <div class="highlight-box">
+        <p>This programme is designed targeting students from <strong>Class 5 to 10</strong> in Malappuram district — building skills in robotics engineering, AI, coding, and life skills through hands-on project-based learning.</p>
+      </div>
+      <p style="font-size:0.88rem;color:var(--mid);line-height:1.7;font-weight:300;margin-bottom:1.2rem">Submitted by <strong style="color:var(--navy)">Botrix Edu & Wabil Institute</strong> under the Navakeral Nirmithi programme for Malappuram Mandalam.</p>
+      <div class="contact-strip">
+        <div class="contact-pill">📞 <strong>+91 80891 09815</strong></div>
+        <div class="contact-pill">📞 <strong>+91 77369 53535</strong></div>
+        <div class="contact-pill">✉ <strong>botrixedu@gmail.com</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section class="programs" id="programs">
+  <div class="reveal">
+    <div class="sec-label">Our Programmes</div>
+    <h2 class="sec-title">Two Flagship Learning Tracks</h2>
+    <p class="sec-sub">Choose the path that fits your age, interest, and learning goals — both fully hands-on and project-based.</p>
+  </div>
+  <div class="programs-grid">
+    <div class="prog-card reveal">
+      <img src="https://images.unsplash.com/photo-1624555130581-1d9cca783bc0?w=600&q=80" alt="Robotics Programme" class="prog-img"/>
+      <div class="prog-body">
+        <div class="prog-tag">Robotics & Life Skills</div>
+        <div class="prog-title">Advanced Robotics Programme</div>
+        <div class="prog-desc">A 6-month deep-dive into Electronics, Robotics, Coding, 3D Design, Arduino, and AI. Students go from zero knowledge to building their own AI-based robotics project — with certification.</div>
+        <div class="prog-pills">
+          <span class="pill">Class 5–10</span><span class="pill">6 Months</span><span class="pill">₹12,999</span><span class="pill">Weekend Classes</span><span class="pill">90 min / session</span><span class="pill">48 Classes</span>
+        </div>
+      </div>
+    </div>
+    <div class="prog-card reveal rd1">
+      <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?w=600&q=80" alt="AI Diploma" class="prog-img"/>
+      <div class="prog-body">
+        <div class="prog-tag">AI Diploma</div>
+        <div class="prog-title">6-Month Diploma in Artificial Intelligence</div>
+        <div class="prog-desc">A structured AI diploma covering Python, Machine Learning, Deep Learning, Generative AI, Prompt Engineering, and AI Agents. Ideal for Plus Two / Degree students ready to enter the AI workforce.</div>
+        <div class="prog-pills">
+          <span class="pill">Plus Two / Degree</span><span class="pill">6 Months</span><span class="pill">Theory + Practical</span><span class="pill">6 Modules</span><span class="pill">Final AI Project</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROBOTICS CURRICULUM -->
+<section class="curriculum" id="curriculum">
+  <div class="reveal">
+    <div class="sec-label">Robotics Roadmap</div>
+    <h2 class="sec-title">6-Month Complete Robotics Curriculum</h2>
+    <p class="sec-sub">Every month is a new milestone — from zero electronics knowledge to building your own AI-powered robot and presenting it.</p>
+  </div>
+  <div class="months-grid">
+    <div class="month-card reveal">
+      <div class="month-num">Month 1</div>
+      <div class="month-title">Electronics Fundamentals</div>
+      <ul class="month-list">
+        <li>Voltage, Current, Resistance basics</li>
+        <li>Components: Resistor, LED, Capacitor</li>
+        <li>Circuit diagrams & Breadboard</li>
+        <li>Series & Parallel connections</li>
+        <li>LED Blinking & Push Button control</li>
+      </ul>
+      <div class="month-outcome">✓ Build basic electrical circuits</div>
+    </div>
+    <div class="month-card reveal rd1">
+      <div class="month-num">Month 2</div>
+      <div class="month-title">Introduction to Robotics</div>
+      <ul class="month-list">
+        <li>Types of Robots & Robot Anatomy</li>
+        <li>Sensors & Actuators</li>
+        <li>Real-world Robotics applications</li>
+        <li>Simple Robot Assembly</li>
+        <li>Real Robot Analysis</li>
+      </ul>
+      <div class="month-outcome">✓ Understand how robots work</div>
+    </div>
+    <div class="month-card reveal rd2">
+      <div class="month-num">Month 3</div>
+      <div class="month-title">Scratch Coding — Logic Building</div>
+      <ul class="month-list">
+        <li>Programming basics: logic & flow</li>
+        <li>Loops, Conditions, Variables</li>
+        <li>Event-driven programming</li>
+        <li>Animation creation & Game design</li>
+        <li>Mini Game Development</li>
+      </ul>
+      <div class="month-outcome">✓ Strong coding logic & creativity</div>
+    </div>
+    <div class="month-card reveal">
+      <div class="month-num">Month 4</div>
+      <div class="month-title">3D Design & Mechanical Thinking</div>
+      <ul class="month-list">
+        <li>Tinkercad & Fusion 360 basics</li>
+        <li>Gears, Levers, Joints mechanics</li>
+        <li>Design a robot chassis</li>
+        <li>3D modelling for robotics parts</li>
+      </ul>
+      <div class="month-outcome">✓ Design thinking + mechanical skills</div>
+    </div>
+    <div class="month-card reveal rd1">
+      <div class="month-num">Month 5</div>
+      <div class="month-title">Arduino & Sensors — Core Robotics</div>
+      <ul class="month-list">
+        <li>Arduino Uno introduction</li>
+        <li>Digital & Analog programming</li>
+        <li>Sensors: IR, Ultrasonic, LDR, LCD</li>
+        <li>Motors & Servo control</li>
+        <li>Mini Arduino projects</li>
+      </ul>
+      <div class="month-outcome">✓ Real working smart robot systems</div>
+    </div>
+    <div class="month-card reveal rd2">
+      <div class="month-num">Month 6</div>
+      <div class="month-title">Python, C++ & AI — Final Project</div>
+      <ul class="month-list">
+        <li>Python fundamentals & C++ basics</li>
+        <li>AI Basics: Object Detection, Image Recognition</li>
+        <li>ChatGPT / Gemini AI tool automation</li>
+        <li>Final robotics project development</li>
+        <li>Project presentation & certification</li>
+      </ul>
+      <div class="month-outcome">✓ Build & present your own AI robot</div>
+    </div>
+  </div>
+</section>
+
+<!-- AI DIPLOMA -->
+<section class="diploma" id="diploma">
+  <div class="reveal" style="position:relative">
+    <div class="sec-label">AI Diploma — 6 Months</div>
+    <h2 class="sec-title">Diploma in Artificial Intelligence</h2>
+    <p class="sec-sub" style="color:rgba(255,255,255,0.5)">Learn AI · Build AI · Lead with AI — A complete theory + practical curriculum for Plus Two and Degree students.</p>
+  </div>
+  <div class="modules-grid">
+    <div class="mod-card reveal">
+      <div class="mod-num">01</div>
+      <div class="mod-title">Introduction to AI</div>
+      <div class="mod-weeks">Weeks 1–2</div>
+      <ul class="mod-list">
+        <li>What is Artificial Intelligence?</li>
+        <li>Types of AI</li>
+        <li>Real-world AI applications</li>
+        <li>AI tools and future trends</li>
+        <li>AI ethics basics</li>
+      </ul>
+    </div>
+    <div class="mod-card reveal rd1">
+      <div class="mod-num">02</div>
+      <div class="mod-title">Python for AI</div>
+      <div class="mod-weeks">Weeks 3–6</div>
+      <ul class="mod-list">
+        <li>Python basics & data types</li>
+        <li>Conditions, loops, functions</li>
+        <li>File handling</li>
+        <li>Mini coding exercises</li>
+      </ul>
+    </div>
+    <div class="mod-card reveal rd2">
+      <div class="mod-num">03</div>
+      <div class="mod-title">Machine Learning</div>
+      <div class="mod-weeks">Weeks 7–10</div>
+      <ul class="mod-list">
+        <li>Types of ML: Supervised, Unsupervised, RL</li>
+        <li>Supervised & Unsupervised learning</li>
+        <li>Data collection & preprocessing</li>
+        <li>Basic model training</li>
+      </ul>
+    </div>
+    <div class="mod-card reveal">
+      <div class="mod-num">04</div>
+      <div class="mod-title">Deep Learning</div>
+      <div class="mod-weeks">Weeks 11–14</div>
+      <ul class="mod-list">
+        <li>Neural networks basics</li>
+        <li>Image classification concepts</li>
+        <li>Computer vision basics</li>
+        <li>Deep learning applications</li>
+      </ul>
+    </div>
+    <div class="mod-card reveal rd1">
+      <div class="mod-num">05</div>
+      <div class="mod-title">Generative AI & Prompt Engineering</div>
+      <div class="mod-weeks">Weeks 15–18</div>
+      <ul class="mod-list">
+        <li>Text & Image generation</li>
+        <li>Prompt writing fundamentals</li>
+        <li>Advanced prompting techniques</li>
+        <li>AI workflow automation</li>
+      </ul>
+    </div>
+    <div class="mod-card reveal rd2">
+      <div class="mod-num">06</div>
+      <div class="mod-title">AI Agents & Projects</div>
+      <div class="mod-weeks">Weeks 19–24</div>
+      <ul class="mod-list">
+        <li>What are AI agents?</li>
+        <li>Creating simple AI assistants</li>
+        <li>Chatbot creation</li>
+        <li>AI agent tools & integrations</li>
+        <li>Final project development</li>
+      </ul>
+    </div>
+  </div>
+  <div class="projects-strip reveal" style="margin-top:2rem">
+    <div class="proj-item"><div class="proj-emoji">🤖</div><div class="proj-name">AI Chatbot</div><div class="proj-type">Conversational AI</div></div>
+    <div class="proj-item"><div class="proj-emoji">🎨</div><div class="proj-name">Image Generator</div><div class="proj-type">Generative AI</div></div>
+    <div class="proj-item"><div class="proj-emoji">🧠</div><div class="proj-name">AI Assistant</div><div class="proj-type">Agent Development</div></div>
+    <div class="proj-item"><div class="proj-emoji">📡</div><div class="proj-name">Recommendation System</div><div class="proj-type">ML Application</div></div>
+    <div class="proj-item"><div class="proj-emoji">👁</div><div class="proj-name">Object Detection</div><div class="proj-type">Computer Vision</div></div>
+  </div>
+  <div class="cert-box reveal">
+    <div class="cert-icon">🎓</div>
+    <div>
+      <div class="cert-title">BOTRIX EDU — AI Diploma Completion Certificate</div>
+      <div class="cert-sub">Awarded upon successful completion of all 6 modules and the final AI project. Recognised credential for career advancement in AI & technology.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP: COMPONENTS -->
+<section class="shop" id="shop">
+  <div class="reveal">
+    <div class="sec-label">Components Store</div>
+    <h2 class="sec-title">Purchase Your Learning Kit</h2>
+    <p class="sec-sub">Get all the hardware, sensors, and robotics kits you need for your course — sourced for quality and affordability.</p>
+  </div>
+  <div class="shop-tabs">
+    <button class="shop-tab active" onclick="filterShop('all',this)">All Items</button>
+    <button class="shop-tab" onclick="filterShop('starter',this)">Starter Kits</button>
+    <button class="shop-tab" onclick="filterShop('sensors',this)">Sensors</button>
+    <button class="shop-tab" onclick="filterShop('motors',this)">Motors & Actuators</button>
+    <button class="shop-tab" onclick="filterShop('boards',this)">Boards & Modules</button>
+    <button class="shop-tab" onclick="filterShop('ai',this)">AI & Vision</button>
+  </div>
+  <div class="shop-grid" id="shopGrid">
+
+    <div class="shop-card" data-cat="starter">
+      <div class="shop-card-img" style="background:linear-gradient(135deg,#e8f0fe,#c7d9f8);display:flex;align-items:center;justify-content:center;font-size:3.5rem">🔧</div>
+      <div class="shop-card-body">
+        <div class="shop-badge">Starter Kit</div>
+        <div class="shop-name">BotrixEdu Basic Robotics Kit</div>
+        <div class="shop-desc">Arduino Uno, breadboard, LEDs, resistors, jumper wires, and sensors — everything for Month 1–2.</div>
+        <div class="shop-footer">
+          <div class="shop-price">₹1,499 <span>incl. delivery</span></div>
+          <button class="add-btn" onclick="addCart('Basic Robotics Kit',1499)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card" data-cat="boards">
+      <div class="shop-card-img" style="background:linear-gradient(135deg,#e8f0fe,#c7d9f8);display:flex;align-items:center;justify-content:center;font-size:3.5rem">⚡</div>
+      <div class="shop-card-body">
+        <div class="shop-badge">Boards & Modules</div>
+        <div class="shop-name">Arduino Uno R3 (Original)</div>
+        <div class="shop-desc">The official Arduino Uno R3 microcontroller board — the heart of all robotics projects in Month 5.</div>
+        <div class="shop-footer">
+          <div class="shop-price">₹699 <span>per unit</span></div>
+          <button class="add-btn" onclick="addCart('Arduino Uno R3',699)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card" data-cat="sensors">
+      <div class="shop-card-img" style="background:linear-gradient(135deg,#e8f0fe,#c7d9f8);display:flex;align-items:center;justify-content:center;font-size:3.5rem">📡</div>
+      <div class="shop-card-body">
+        <div class="shop-badge">Sensors</div>
+        <div class="shop-name">Ultrasonic Sensor HC-SR04</div>
+        <div class="shop-desc">Distance measuring ultrasonic sensor — used for obstacle avoidance robots and smart systems.</div>
+        <div class="shop-footer">
+          <div class="shop-price">₹99 <span>per unit</span></div>
+          <button class="add-btn" onclick="addCart('Ultrasonic Sensor HC-SR04',99)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card" data-cat="sensors">
+      <div class="shop-card-img" style="background:linear-gradient(135deg,#e8f0fe,#c7d9f8);display:flex;align-items:center;justify-content:center;font-size:3.5rem">🔦</div>
+      <div class="shop-card-body">
+        <div class="shop-badge">Sensors</div>
+        <div class="shop-name">IR Sensor Module</div>
+        <div class="shop-desc">Infrared proximity sensor for line-following robots and obstacle detection. Essential for Month 5 projects.</div>
+        <div class="shop-footer">
+          <div class="shop-price">₹79 <span>per unit</span></div>
+          <button class="add-btn" onclick="addCart('IR Sensor Module',79)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card" data-cat="motors">
+      <div class="shop-card-img" style="background:linear-gradient(135deg,#e8f0fe,#c7d9f8);display:flex;align-items:center;justify-content:center;font-size:3.5rem">⚙️</div>
+      <div class="shop-card-body">
+        <div class="shop-badge">Motors & Actuators</div>
+        <div class="shop-name">Servo Motor SG90</div>
+        <div class="shop-desc">Micro servo motor for precise angle control in robot arms and steering mechanisms. 180° rotation.</div>
+        <div class="shop-footer">
+          <div class="shop-price">₹149 <span>per unit</span></div>
+          <button class="add-btn" onclick="addCart('Servo Motor SG90',149)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card" data-cat="motors">
+      <div class="shop-card-img" style="background:linear-gradient(135deg,#e8f0fe,#c7d9f8);display:flex;align-items:center;justify-content:center;font-size:3.5rem">🔩</div>
+      <div class="shop-card-body">
+        <div class="shop-badge">Motors & Actuators</div>
+        <div class="shop-name">DC Motor + L298N Driver</div>
+        <div class="shop-desc">Dual DC gear motors with L298N motor driver module — perfect for building wheeled robots.</div>
+        <div class="shop-footer">
+          <div class="shop-price">₹299 <span>combo pack</span></div>
+          <button class="add-btn" onclick="addCart('DC Motor + L298N Driver',299)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card" data-cat="ai">
+      <div class="shop-card-img" style="background:linear-gradient(135deg,#e8f0fe,#c7d9f8);display:flex;align-items:center;justify-content:center;font-size:3.5rem">👁</div>
+      <div class="shop-card-body">
+        <div class="shop-badge">AI & Vision</div>
+        <div class="shop-name">ESP32-CAM AI Vision Module</div>
+        <div class="shop-desc">WiFi + camera module for AI vision projects. Supports object detection and image classification tasks.</div>
+        <div class="shop-footer">
+          <div class="shop-price">₹499 <span>per unit</span></div>
+          <button class="add-btn" onclick="addCart('ESP32-CAM AI Vision Module',499)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card" data-cat="starter">
+      <div class="shop-card-img" style="background:linear-gradient(135deg,#e8f0fe,#c7d9f8);display:flex;align-items:center;justify-content:center;font-size:3.5rem">🤖</div>
+      <div class="shop-card-body">
+        <div class="shop-badge">Starter Kit</div>
+        <div class="shop-name">Complete 6-Month Course Kit</div>
+        <div class="shop-desc">Everything you need for all 6 months — Arduino, sensors, motors, breadboard, wires, servo, and ESP32-CAM. Best value.</div>
+        <div class="shop-footer">
+          <div class="shop-price">₹2,999 <span>full bundle</span></div>
+          <button class="add-btn" onclick="addCart('Complete 6-Month Course Kit',2999)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card" data-cat="boards">
+      <div class="shop-card-img" style="background:linear-gradient(135deg,#e8f0fe,#c7d9f8);display:flex;align-items:center;justify-content:center;font-size:3.5rem">🧩</div>
+      <div class="shop-card-body">
+        <div class="shop-badge">Boards & Modules</div>
+        <div class="shop-name">Raspberry Pi Pico W</div>
+        <div class="shop-desc">Microcontroller with wireless connectivity for advanced Python projects and IoT automation in Month 6.</div>
+        <div class="shop-footer">
+          <div class="shop-price">₹549 <span>per unit</span></div>
+          <button class="add-btn" onclick="addCart('Raspberry Pi Pico W',549)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card" data-cat="sensors">
+      <div class="shop-card-img" style="background:linear-gradient(135deg,#e8f0fe,#c7d9f8);display:flex;align-items:center;justify-content:center;font-size:3.5rem">🌡</div>
+      <div class="shop-card-body">
+        <div class="shop-badge">Sensors</div>
+        <div class="shop-name">LDR + DHT11 Sensor Pack</div>
+        <div class="shop-desc">Light Dependent Resistor and temperature/humidity sensor — perfect for smart environment projects.</div>
+        <div class="shop-footer">
+          <div class="shop-price">₹129 <span>combo pack</span></div>
+          <button class="add-btn" onclick="addCart('LDR + DHT11 Sensor Pack',129)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card" data-cat="ai">
+      <div class="shop-card-img" style="background:linear-gradient(135deg,#e8f0fe,#c7d9f8);display:flex;align-items:center;justify-content:center;font-size:3.5rem">🗣</div>
+      <div class="shop-card-body">
+        <div class="shop-badge">AI & Vision</div>
+        <div class="shop-name">Voice Recognition Module</div>
+        <div class="shop-desc">Add voice control to your robots. Supports up to 80 command words for AI assistant and chatbot integrations.</div>
+        <div class="shop-footer">
+          <div class="shop-price">₹399 <span>per unit</span></div>
+          <button class="add-btn" onclick="addCart('Voice Recognition Module',399)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-card" data-cat="starter">
+      <div class="shop-card-img" style="background:linear-gradient(135deg,#e8f0fe,#c7d9f8);display:flex;align-items:center;justify-content:center;font-size:3.5rem">📦</div>
+      <div class="shop-card-body">
+        <div class="shop-badge">Starter Kit</div>
+        <div class="shop-name">Electronic Components Starter Pack</div>
+        <div class="shop-desc">Resistors, capacitors, LEDs, push buttons, jumper wires, breadboard — the essential toolkit for Month 1.</div>
+        <div class="shop-footer">
+          <div class="shop-price">₹399 <span>full pack</span></div>
+          <button class="add-btn" onclick="addCart('Electronic Components Starter Pack',399)">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MENTORS -->
+<section class="mentors" id="mentors">
+  <div class="reveal">
+    <div class="sec-label">Your Guides</div>
+    <h2 class="sec-title">Expert Mentors & Trainers</h2>
+    <p class="sec-sub">Learn from certified Robotics Engineers and AI specialists with real industry R&D experience.</p>
+  </div>
+  <div class="mentors-grid">
+    <div class="mentor-card reveal">
+      <div class="mentor-avatar">MA</div>
+      <div>
+        <div class="mentor-name">Muhammed Arshad M</div>
+        <div class="mentor-role">Robotics Engineer & AI/ML Specialist</div>
+        <div class="mentor-org">I Hub School of Learning</div>
+        <div class="mentor-tags">
+          <span class="mentor-tag">Robotics Engineering</span>
+          <span class="mentor-tag">AI & Machine Learning</span>
+          <span class="mentor-tag">R&D Expert</span>
+          <span class="mentor-tag">Trainer</span>
+        </div>
+      </div>
+    </div>
+    <div class="mentor-card reveal rd1">
+      <div class="mentor-avatar">ST</div>
+      <div>
+        <div class="mentor-name">Safafuddeen T U</div>
+        <div class="mentor-role">Robotics Engineer & AI/ML Mentor</div>
+        <div class="mentor-org">I Hub School of Learning</div>
+        <div class="mentor-tags">
+          <span class="mentor-tag">Robotics Engineering</span>
+          <span class="mentor-tag">AI & Machine Learning</span>
+          <span class="mentor-tag">R&D Expert</span>
+          <span class="mentor-tag">Mentor</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEES -->
+<section class="fees" id="fees">
+  <div class="reveal">
+    <div class="sec-label">Pricing</div>
+    <h2 class="sec-title">Transparent, Affordable Fees</h2>
+    <p class="sec-sub">Quality AI & Robotics education at an accessible price — with scholarship support available for deserving students.</p>
+  </div>
+  <div class="fee-grid">
+    <div class="fee-card reveal">
+      <div class="fee-tag">Robotics Programme</div>
+      <div class="fee-name">Advanced Robotics</div>
+      <div class="fee-price">₹12,999</div>
+      <div class="fee-note">6-month complete programme</div>
+      <div class="fee-details">
+        <div class="fee-detail"><div class="fee-detail-label">Duration</div><div class="fee-detail-val">6 Months</div></div>
+        <div class="fee-detail"><div class="fee-detail-label">Classes</div><div class="fee-detail-val">48 Sessions</div></div>
+        <div class="fee-detail"><div class="fee-detail-label">Schedule</div><div class="fee-detail-val">3 days/week</div></div>
+        <div class="fee-detail"><div class="fee-detail-label">Per Session</div><div class="fee-detail-val">90 minutes</div></div>
+      </div>
+      <ul class="fee-list">
+        <li>Electronics & Robotics kit included</li>
+        <li>Hands-on project at every stage</li>
+        <li>3D Design & Arduino programming</li>
+        <li>AI project at final month</li>
+        <li>Certification on completion</li>
+        <li>Scholarship available for eligible students</li>
+      </ul>
+      <a href="#cta" class="btn-p" style="width:100%;justify-content:center">Enroll Now</a>
+    </div>
+    <div class="fee-card featured reveal rd1">
+      <div class="fee-tag">AI Diploma</div>
+      <div class="fee-name" style="color:#fff">AI Diploma Programme</div>
+      <div class="fee-price">Contact Us</div>
+      <div class="fee-note">6-month theory + practical diploma</div>
+      <div class="fee-details">
+        <div class="fee-detail"><div class="fee-detail-label">Duration</div><div class="fee-detail-val">6 Months</div></div>
+        <div class="fee-detail"><div class="fee-detail-label">Modules</div><div class="fee-detail-val">6 Modules</div></div>
+        <div class="fee-detail"><div class="fee-detail-label">Eligibility</div><div class="fee-detail-val">Plus Two / Degree</div></div>
+        <div class="fee-detail"><div class="fee-detail-label">Mode</div><div class="fee-detail-val">Theory + Practical</div></div>
+      </div>
+      <ul class="fee-list">
+        <li>Python, ML, Deep Learning, GenAI</li>
+        <li>Prompt Engineering & AI Agents</li>
+        <li>Hands-on final AI project</li>
+        <li>Choose from 5 project tracks</li>
+        <li>Industry-recognised certification</li>
+        <li>No prior coding experience needed</li>
+      </ul>
+      <a href="#cta" class="btn-p" style="width:100%;justify-content:center;background:linear-gradient(135deg,var(--glow),var(--electric));box-shadow:0 4px 20px rgba(96,165,250,0.4)">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- VISION / 5-YEAR PLAN -->
+<section class="vision" id="vision">
+  <div style="position:relative">
+    <div class="sec-label reveal">5-Year Vision</div>
+    <h2 class="sec-title reveal">Botrix Edu's Roadmap for Kerala</h2>
+    <p class="vision-quote reveal">"Empowering children through Robotics thinking, technological awareness, and creative spirit — nurturing the next generation of leaders for the future."</p>
+    <div class="plan-grid">
+      <div class="plan-card reveal"><div class="plan-yr">Year 1</div><div class="plan-title">Academic Development & Startup Setup</div><div class="plan-sub">Launch AI & Robotics courses, workshops, demos, first prototype projects</div></div>
+      <div class="plan-card reveal rd1"><div class="plan-yr">Year 2</div><div class="plan-title">R&D Department Formation</div><div class="plan-sub">Build R&D wing, develop prototypes into real products, innovation activities</div></div>
+      <div class="plan-card reveal rd2"><div class="plan-yr">Year 3</div><div class="plan-title">Product Marketing & Expansion</div><div class="plan-sub">Launch BOTRIX products to market, regional & national distribution</div></div>
+      <div class="plan-card reveal rd3"><div class="plan-yr">Year 4</div><div class="plan-title">Skill-Based Advanced Training</div><div class="plan-sub">AI & ML, Robotics Engineering, Embedded Systems job-ready programmes</div></div>
+      <div class="plan-card reveal rd4"><div class="plan-yr">Year 5</div><div class="plan-title">Academic Expansion Across Malappuram</div><div class="plan-sub">Multiple BOTRIX centres, school & college partnerships, tech training hub</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-card reveal">
+    <div class="sec-label">Start Your Journey</div>
+    <h2 class="sec-title">Ready to Build the Future?</h2>
+    <p class="cta-sub">Enroll your child or yourself in BotrixEdu's Robotics & AI programmes. Limited seats — weekends only. No prior experience needed.</p>
+    <div class="cta-actions">
+      <a href="tel:+918089109815" class="btn-p">📞 Call to Enroll</a>
+      <a href="mailto:botrixedu@gmail.com" class="btn-s" style="color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.2)">✉ Email Us</a>
+    </div>
+    <div class="cta-contact">
+      <div class="cta-c">📞 <a href="tel:+918089109815">+91 80891 09815</a></div>
+      <div class="cta-c">📞 <a href="tel:+917736953535">+91 77369 53535</a></div>
+      <div class="cta-c">✉ <a href="mailto:botrixedu@gmail.com">botrixedu@gmail.com</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <a href="#" class="logo">
+        <div class="logo-icon"><img src="data:image/jpeg;base64,/9j/4RCCRXhpZgAATU0AKgAAAAgADAEAAAMAAAABASwAAAEBAAMAAAABAOEAAAECAAMAAAADAAAAngEGAAMAAAABAAIAAAESAAMAAAABAAEAAAEVAAMAAAABAAMAAAEaAAUAAAABAAAApAEbAAUAAAABAAAArAEoAAMAAAABAAIAAAExAAIAAAAcAAAAtAEyAAIAAAAUAAAA0IdpAAQAAAABAAAA5AAAARwACAAIAAgADqYAAAAnEAAOpgAAACcQQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzADIwMjU6MDg6MTUgMDc6MjI6MzUAAASQAAAHAAAABDAyMjGgAQADAAAAAf//AACgAgAEAAAAAQAAAKugAwAEAAAAAQAAAG8AAAAAAAAABgEDAAMAAAABAAYAAAEaAAUAAAABAAABagEbAAUAAAABAAABcgEoAAMAAAABAAIAAAIBAAQAAAABAAABegICAAQAAAABAAAPAAAAAAAAAABIAAAAAQAAAEgAAAAB/9j/7QAMQWRvYmVfQ00AAv/uAA5BZG9iZQBkgAAAAAH/2wCEAAwICAgJCAwJCQwRCwoLERUPDAwPFRgTExUTExgRDAwMDAwMEQwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwBDQsLDQ4NEA4OEBQODg4UFA4ODg4UEQwMDAwMEREMDAwMDAwRDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDP/AABEIAGgAoAMBIgACEQEDEQH/3QAEAAr/xAE/AAABBQEBAQEBAQAAAAAAAAADAAECBAUGBwgJCgsBAAEFAQEBAQEBAAAAAAAAAAEAAgMEBQYHCAkKCxAAAQQBAwIEAgUHBggFAwwzAQACEQMEIRIxBUFRYRMicYEyBhSRobFCIyQVUsFiMzRygtFDByWSU/Dh8WNzNRaisoMmRJNUZEXCo3Q2F9JV4mXys4TD03Xj80YnlKSFtJXE1OT0pbXF1eX1VmZ2hpamtsbW5vY3R1dnd4eXp7fH1+f3EQACAgECBAQDBAUGBwcGBTUBAAIRAyExEgRBUWFxIhMFMoGRFKGxQiPBUtHwMyRi4XKCkkNTFWNzNPElBhaisoMHJjXC0kSTVKMXZEVVNnRl4vKzhMPTdePzRpSkhbSVxNTk9KW1xdXl9VZmdoaWprbG1ub2JzdHV2d3h5ent8f/2gAMAwEAAhEDEQA/APVUkkklKSSSSUpJVOo9W6Z0qpt3UsqrErsdsY+1waC6N20bv5IWf/z2+qP/AJb4n/brf70lO2ksL6y/W7pn1f6I3q9h+0tvDfsVVZ/nnPHqV7X+7ZVs/SPu/wBH+/Z6da81r/x2fWIZIfZhYjsbd7qmixr9s/RbcbXt9Tb/AIT0f+tJKfZ0lj9H+tPSeq9Cb11looxAD65tIHpOb/OMtP8AI/6hQ/57fVH/AMt8T/t1v96SnbSWJ/z2+qP/AJb4n/brf70h9dvqiTH7YxP+3W/3pKdtJVcHqvS+otc7p+ZRmBn0zRYyyJ/e9JztqtJKUkkkkpSSSSSlJJJJKf/Q9VSSSSUpJJJJT51/jt/8T+D/AOG//Rdq8p6T0Hq/Wn2V9LxX5T6Wh1gZGgJ2j6RavSv8c3V+lZPTMXAxsum7Lpyi62it4e5gayxjvVDN3p+930Xrnf8AFZ9Y+i/V/qGdd1fI+zV3UtZW7ZZZLg7cR+gZakp6D/G10/Ot+rXQ84UOqqw27MqqJNTrWUisWbNzW7H1Op3fQ9TZ++vKF73k/wCMv6gZGPbRb1BttdrHMfW/HyC1wcNrmPa7H2ua5eE4jqm5VLroNTbGmyRI2gjfLfzvakp9V+oXSuos/wAW3WQKX2P6ozIGHS0e5++n7KywB232vt/6Fa4f/wAbz66f+VV33s/8mvXGf4z/AKhMY1jOpBrGgBrRj5AAA4a0fZ0//jpfUT/yz/8AAMj/AN50lPkX/jefXT/yqu+9n/k0v/G8+un/AJU3fez/AMmvbuk/XL6r9YeKun9RptucdrKXE1WOPP6OnIbVbZx+YxbSSn5kyen9c6DlVvyaMjp2SwzTYQ6p0j86m32/+BuXof1G/wAa93rV9L+s1gdW+GU9RMNLTw1uZw30/wDuz/g/+1G/33VeoZ/T8HqWJZh59DMnGtEPqsEj+sP3Xt/Me33sXgf1++qDvqt1cU1EvwMoGzDsdzAP6Sh//CU7m/8AW31pKfoRJcP/AIpvrHZ1f6vuwchxfldKLai496XA/ZST+8z07aP6lLF3CSlJJJJKUkkkkp//0fVUkkklKXi3+ML/ABkZfU8m7pPRbjT0uua7b6zDsg8P/SN+ji/msYz+e/wn0/TZ6L/jD6pZ0v6odQvpJbdYwUVkcg3OFLnf2a3PXi31J+r7frD9ZMXp1s/ZiTblEc+lWN7m8t2+q7ZRv/M9VJSPof1O+sfXm+p0zCfbQDBvcRXXI5222ljbNv8Awa2P/Gl+uv8A3Gq/7eZ/5Je600049LKKGNqpqaGV1sAa1rWja1jGt9rWtVD6wfWHpf1e6ec/qdhZVu2Ma0bnveQXNrrb+97fzvYkp8Z/8aX66/8Acar/ALeZ/wCSS/8AGl+uv/car/t5n/kl7F9W/rR0j6y4bsvpljiK3bbqbBtsrcdWixnub7m/RfW99f8A01rpKfBv/Gl+uv8A3Gq/7eZ/5JL/AMaX66/9xqv+3mf+SXrv1m+uPRPqxVW7qT3my+fSopbuscBG58OLGNY3d/hHq90XrXTuudPr6j0231seyRMEOa5v067WO9zHt/8AUn82kp+eet/VXr/QC09Vw30VvO1lwh9ZP7vrVF9e7T6H013H+Lf/ABkZTMqnoXXLjdTcRXh5dhl7Hn6FF7z7rKbHeyqx3vqf/wAB/Meq52DidQxLcLNqbfjXtLLancEH/qXfuPb9BfOH1n6M7oP1gzelbi5uLZ+ieTLjW8Nux3PLQ39J6Nlfqfy0lP0svP8A/HRj1P8AqxjZDh+kpy2Bh8nst3t/6DF1X1T6o/q31b6d1Cw7rb6G+q7xsb+iud/26x684/xz/WKjJycboGM7f9kPr5ZHAscNlNX9eupz32f8bWkpqf4k7rB9ZM2gH9G/Cc9zfFzLaGsP9n1bF7QvK/8AEj0lwHUes2NhrtuJQ7xj9Pk6f+wq9USUpJJJJSkkkklP/9L1VJJJJTxX+N3/AMRlv/H0/wDVLh/8S/8A4rL/APwlZ/58x13H+N3/AMRl3/H0/wDVLh/8S/8A4rL/APwlZ/58x0lPtq8y/wAeH/J3S/8Ajrf+pYvTV5l/jw/5O6X/AMdb/wBSxJTU/wARv891n+rj/lyF6wvJ/wDEb/PdZ/q4/wCXIXrCSnxr/Hb/AMv4H/hT/wBGWrpf8Sn/AIlcr/w/Z/55xVzX+O3/AJewP/Cn/oyxdL/iU/8AErlf+H7P/POKkp9AXgf+Nb/xcZ39Sj/zzWvfF4H/AI1v/Fxnf1KP/PVaSmeF/jL6r0z6r43QOlVNx7KW2NszXHe/9JZZd+grgMq2+pt3v9VYn1f+r3VvrR1UYuIHWPe7fk5L5LWBx9917/8AV9qm76ode/YVP1gqx/X6ba1zjbUdxrDHPqf69X84xrfSe71dvpf8Ir31I+vWf9VsvYZv6Ve6cnF0kEw37Rjz9C9rW/8AF3fQs/wVtSU+69F6RidF6XjdLwwRRis2tLtS4k77LH/y7bHPseryDiZePm4tWXi2C3HvYLKrBw5rhua7VGSUpJJJJSkkkklP/9P1VJJJJTyn+M/BszPqXnCsS7H2XwP3a3tNv+bVvevKP8W3W6Oi/WzGuyXivGyWuxrrHaBosj03ucfaxnrsp9R/5la9/tqruqfTa0PrsaWPY4SC1w2ua4fyl8//AF5+pWZ9V+ouLGut6Xe4nEyYkCfd9mud+bfX/wCDM/S/6SutKfoNc99dPqhjfWvprMSy4419D/Ux7wNwBI2vZZX7d1b/AOsvKvq1/jU+sHQ8avCvazqOHUNtbbiW2saPo115DZ9jf+Gru/0df6NdB/4+Z/8AKT/2a/8AfVJT2H1H+pOP9UsS9gvOVlZZab7tuwQzd6ddde5/0fUf+d710y8p/wDHzP8A5Sf+zX/vql/4+Z/8pP8A2a/99UlPU/Xn/F/j/Ww4+Q3JOHmYwNYs272PrJ3bHs3M+g76D2/+q9P6pfVjF+q/SG9Nx7HXOLzdfc7TfY4NY54ZLvTbsrrZsXB/+Pmf/KT/ANmv/fVL/wAfM/8AlJ/7Nf8Avqkp9Vc5rWlziGtaJJOgAHdfOX136xR1r609Q6hjGcex4ZS7s5lTWY7bGz+bb6Xq/wBtaX1n/wAZv1g+sFD8MbMDBfIfTRO57T+Zfe73Pb/Jr9Fj/wDCb1P/ABd/UbI+sPUK83LrLej4zw617hAuc0/0av8Aea7/AA/7jP8AhElPrf1FwH9P+qPS8awEP9AWOaRBBuLsktP9X1V5d/jW+qOP0PqdXUen1irB6gXbqm6Nrubq9tY/MquafUZX/wAb/g/TYvbgABA0HguC/wAdBq/5q0B8eocyv0/H+bu3f9FJTT/xK9bsyOm5nRrnT9ieLseTr6dxd6tbW/uV3N9T/wBCV6UvFv8AEoHf858sidv2F8+E+rjbf+/L2lJSkkkklKSSSSU//9T1VJJJJSkLKxcbMx342XUy+i0bbKrGhzXD+U1yKkkp8b/xo/UnoPQMHH6j0tllD8jI9J9O4urALH2Szfusb7mfvrmvqR9UbfrX1V+J632bHoZ6uRdG50SGNrrZLf0lk/2P/A16J/jt/wDE/g/+G/8A0XasT/Eh/wArdS/8Ls/6tJTq/wDjIdK/8s8j/MYl/wCMh0r/AMs8j/MYvS0klPmn/jIdK/8ALPI/zGLzv64/Ve/6r9Zd02y0X1urbdRcBtLq3FzPeyXbHtsrsYvo9eKf46//ABVYv/hCv/z9lJKdP/Fl9Rfq91fo46x1Kp+TcLn1ilzoqAZt2/o2bXP+l+e/YvVaaaqKm00sbVVWA1lbAGtaBw1jG+1rV4H9W/8AGR1z6t9N/ZuDRi2Uh7rN1zLHPl0TrXfU3839xan/AI9f1q/7i4H/AG3d/wC9SSn2pxDQXOMAaknQABeG/wCNL630de6rXhYFgs6f0/cG2tMtttd/O2sP59TNvp1P/wCMs/m7Fl/WD/GB9Z/rBW6jLyRTiO+li449Os+VmrrrW/yLrbGLQ+o3+LrqH1hvrzc5jsbo7SHOsdLXXAf4PG/kO/OyPofufpElPY/4mOhWYnSMnrF7druovDKAQP5qncPUB+l+lue9v/WF6Mh0UU49FePQwV00tFdVbRDWtaNrGNb+61qIkpSSSSSlJJJJKf/V9VSXyqkkp+qkl8qpJKfpL6y/Vbpn1mxasTqRsFVNnqs9Jwad0OZrLX/mvVb6tfUbon1ZyLsjppuL8hgreLXhwgHf7QGMXzskkp+qkl8qpJKfqpc39ZPqD0L6y57M/qRv9auptDRU8Nbta6y3gsf7t1zl88pJKfcf/Gc+qHjlf9uj/wBJJf8AjOfVDxyv+3R/6SXhySSn6F6X/i6+p/TLBbT09t1rYIsyCboI/ODLS6prv+trpAABA4C+VkklP1UkvlVJJT9VJL5VSSU/VSS+VUklP//Z/+0XgFBob3Rvc2hvcCAzLjAAOEJJTQQEAAAAAAAPHAFaAAMbJUccAgAAAiTgADhCSU0EJQAAAAAAEIDHEsgXNamdDSwXpSf7cws4QklNBDoAAAAAAJMAAAAQAAAAAQAAAAAAC3ByaW50T3V0cHV0AAAABQAAAABDbHJTZW51bQAAAABDbHJTAAAAAFJHQkMAAAAASW50ZWVudW0AAAAASW50ZQAAAABDbHJtAAAAAE1wQmxib29sAQAAAA9wcmludFNpeHRlZW5CaXRib29sAAAAAAtwcmludGVyTmFtZVRFWFQAAAABAAAAOEJJTQQ7AAAAAAGyAAAAEAAAAAEAAAAAABJwcmludE91dHB1dE9wdGlvbnMAAAASAAAAAENwdG5ib29sAAAAAABDbGJyYm9vbAAAAAAAUmdzTWJvb2wAAAAAAENybkNib29sAAAAAABDbnRDYm9vbAAAAAAATGJsc2Jvb2wAAAAAAE5ndHZib29sAAAAAABFbWxEYm9vbAAAAAAASW50cmJvb2wAAAAAAEJja2dPYmpjAAAAAQAAAAAAAFJHQkMAAAADAAAAAFJkICBkb3ViQG/gAAAAAAAAAAAAR3JuIGRvdWJAb+AAAAAAAAAAAABCbCAgZG91YkBv4AAAAAAAAAAAAEJyZFRVbnRGI1JsdAAAAAAAAAAAAAAAAEJsZCBVbnRGI1JsdAAAAAAAAAAAAAAAAFJzbHRVbnRGI1B4bEBYAAAAAAAAAAAACnZlY3RvckRhdGFib29sAQAAAABQZ1BzZW51bQAAAABQZ1BzAAAAAFBnUEMAAAAATGVmdFVudEYjUmx0AAAAAAAAAAAAAAAAVG9wIFVudEYjUmx0AAAAAAAAAAAAAAAAU2NsIFVudEYjUHJjQFkAAAAAAAA4QklNA+0AAAAAABAAYAAAAAEAAgBgAAAAAQACOEJJTQQmAAAAAAAOAAAAAAAAAAAAAD+AAAA4QklNBA0AAAAAAAQAAAAeOEJJTQQZAAAAAAAEAAAAHjhCSU0D8wAAAAAACQAAAAAAAAAAAQA4QklNJxAAAAAAAAoAAQAAAAAAAAACOEJJTQP1AAAAAABIAC9mZgABAGxmZgAGAAAAAAABAC9mZgABAKGZmgAGAAAAAAABADIAAAABAFoAAAAGAAAAAAABADUAAAABAC0AAAAGAAAAAAABOEJJTQP4AAAAAABwAAD/////////////////////////////A+gAAAAA/////////////////////////////wPoAAAAAP////////////////////////////8D6AAAAAD/////////////////////////////A+gAADhCSU0ECAAAAAAAEAAAAAEAAAJAAAACQAAAAAA4QklNBB4AAAAAAAQAAAAAOEJJTQQaAAAAAAN7AAAABgAAAAAAAAAAAAAAbwAAAKsAAAAjADEANwAyADUANAAxADcAMQA2ADUAXwBsAG8AZwBvAGsAdQBjAG8AbQBfAGwAZQB0AHQAZQByAC0AYgAtAHIAbwBiAG8AdAAA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Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgY3JzOkFscmVhZHlBcHBsaWVkPSJUcnVlIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyNS0wNC0xM1QyMDowMjoxOCswNTozMCIgeG1wOk1vZGlmeURhdGU9IjIwMjUtMDgtMTVUMDc6MjI6MzUrMDU6MzAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjUtMDgtMTVUMDc6MjI6MzUrMDU6MzAiIGRjOmZvcm1hdD0iaW1hZ2UvanBlZyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo2OUEyRTc5QTc0NzlGMDExODJERThGQkJBNjBCNkMzOSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo2OUEyRTc5QTc0NzlGMDExODJERThGQkJBNjBCNkMzOSIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOjY5QTJFNzlBNzQ3OUYwMTE4MkRFOEZCQkE2MEI2QzM5Ij4gPHhtcE1NOkhpc3Rvcnk+IDxyZGY6U2VxPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6NjlBMkU3OUE3NDc5RjAxMTgyREU4RkJCQTYwQjZDMzkiIHN0RXZ0OndoZW49IjIwMjUtMDgtMTVUMDc6MjI6MzUrMDU6MzAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCBDUzUgV2luZG93cyIgc3RFdnQ6Y2hhbmdlZD0iLyIvPiA8L3JkZjpTZXE+IDwveG1wTU06SGlzdG9yeT4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg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" alt="BotrixEdu"/></div>
+        <span class="logo-text">Botrix<span>Edu</span></span>
+      </a>
+      <p class="footer-tagline">Kerala's premier Robotics & AI learning academy — empowering the next generation of tech creators in Malappuram.</p>
+    </div>
+    <div class="footer-col"><h4>Programmes</h4><ul><li><a href="#programs">Advanced Robotics</a></li><li><a href="#diploma">AI Diploma</a></li><li><a href="#curriculum">6-Month Roadmap</a></li><li><a href="#fees">Fees & Eligibility</a></li></ul></div>
+    <div class="footer-col"><h4>Resources</h4><ul><li><a href="#shop">Components Shop</a></li><li><a href="#mentors">Our Mentors</a></li><li><a href="#vision">5-Year Vision</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul><li><a href="tel:+918089109815">+91 80891 09815</a></li><li><a href="tel:+917736953535">+91 77369 53535</a></li><li><a href="mailto:botrixedu@gmail.com">botrixedu@gmail.com</a></li><li><a href="#">Malappuram, Kerala</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 BotrixEdu & Wabil Institute. All rights reserved.</div>
+    <div class="footer-social">
+      <a href="#" class="soc">in</a><a href="#" class="soc">𝕏</a><a href="#" class="soc">▶</a><a href="#" class="soc">f</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, {threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// Count-up
+const counters = document.querySelectorAll('.count-up');
+const coio = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      const el = e.target, target = +el.dataset.t, dur = 1600;
+      const start = performance.now();
+      (function tick(now){
+        const t = Math.min((now-start)/dur,1), ease = t<0.5?2*t*t:-1+(4-2*t)*t;
+        el.textContent = Math.floor(ease*target);
+        if(t<1) requestAnimationFrame(tick); else el.textContent=target;
+      })(start);
+      coio.unobserve(el);
+    }
+  });
+},{threshold:0.5});
+counters.forEach(el => coio.observe(el));
+
+// Cart
+let cartCount = 0, cartTotal = 0;
+const cartItems = [];
+function addCart(name, price){
+  cartCount++;
+  cartTotal += price;
+  cartItems.push({name, price});
+  document.getElementById('cartNum').textContent = cartCount;
+  const n = document.getElementById('cartNotif');
+  n.textContent = '✓ ' + name + ' added! Cart: ₹' + cartTotal.toLocaleString('en-IN');
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 2800);
+}
+function openCart(){
+  if(cartCount === 0){ alert('Your cart is empty. Add some components!'); return; }
+  const list = cartItems.map(i => i.name + ' — ₹' + i.price).join('\n');
+  alert('🛒 Cart (' + cartCount + ' items)\n\n' + list + '\n\nTotal: ₹' + cartTotal.toLocaleString('en-IN') + '\n\nContact botrixedu@gmail.com to place order.');
+}
+
+// Shop filter
+function filterShop(cat, btn){
+  document.querySelectorAll('.shop-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.shop-card').forEach(c => {
+    c.style.display = (cat === 'all' || c.dataset.cat === cat) ? '' : 'none';
+  });
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth', block:'start'}); }
+  });
+});
+</script>
+</body>
+</html>
